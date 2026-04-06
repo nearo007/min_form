@@ -515,7 +515,7 @@
     <div class="hero-meta">
       <span>Anônimo e confidencial</span>
       <span>Cerca de 5 minutos</span>
-      <span>10 perguntas</span>
+      <span class="question-quantity">10 perguntas</span>
     </div>
   </div>
 
@@ -551,6 +551,7 @@ async function loadQuestions() {
   renderQuestions();
   setupScrollObserver();
   updateProgress();
+  updateQuestionCount();
 }
 
 function getFallbackQuestions() {
@@ -566,6 +567,15 @@ function getFallbackQuestions() {
     { id: 9, text: "Você já foi alvo de boatos recorrentes?", required: true, type: "radio", options: ["Nunca", "Às vezes", "Frequentemente", "Quase sempre"] },
     { id: 10, text: "Qual ambiente social você considera hostil?", required: true, type: "radio", options: ["Corporativo", "Acadêmico", "Doméstico", "Todos", "Nenhum"] }
   ];
+}
+
+function updateQuestionCount() {
+    const question_len = questions.length;
+
+    const questionCount = document.querySelectorAll('.question-quantity').forEach(qc => {
+        qc.innerHTML = `${question_len} perguntas`;
+    });
+    
 }
 
 function renderQuestions() {
