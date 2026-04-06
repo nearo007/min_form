@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Questionário de Percepção Social</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sage: #8aab96;
+      --sage-light: #eef4f0;
+      --sage-mid: #c8ddd1;
+      --blush: #e8d5cc;
+      --blush-dark: #c9a898;
+      --warm-white: #faf8f5;
+      --stone: #6b6560;
+      --stone-dark: #3d3a37;
+      --stone-light: #b5b0aa;
+      --border: #e2ddd8;
+      --accent: #9aab8e;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--warm-white);
+      color: var(--stone-dark);
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+
+    .hero {
+      background: linear-gradient(160deg, #eef4f0 0%, #f5ede8 100%);
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--sage);
+      font-weight: 500;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 400;
+      color: var(--stone-dark);
+      line-height: 1.25;
+      max-width: 620px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .hero h1 em {
+      color: var(--sage);
+      font-style: italic;
+    }
+
+    .hero p {
+      font-size: 15px;
+      color: var(--stone);
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.8;
+    }
+
+    .hero-meta {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-meta span {
+      font-size: 13px;
+      color: var(--stone-light);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-meta span::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--sage-mid);
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+    }
+
+    .progress-bar-wrap {
+      background: var(--border);
+      border-radius: 99px;
+      height: 3px;
+      margin-bottom: 3rem;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--sage) 0%, var(--blush-dark) 100%);
+      border-radius: 99px;
+      transition: width 0.5s ease;
+      width: 0%;
+    }
+
+    .question-block {
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .question-block.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .question-number {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--stone-light);
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .question-text {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+      color: var(--stone-dark);
+      margin-bottom: 1.2rem;
+      line-height: 1.45;
+      font-weight: 400;
+    }
+
+    .required-star {
+      color: var(--blush-dark);
+      margin-left: 4px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 2.5rem;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-label {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      background: white;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      font-size: 14px;
+      color: var(--stone);
+      user-select: none;
+    }
+
+    .option-label:hover {
+      border-color: var(--sage-mid);
+      background: var(--sage-light);
+      transform: translateX(3px);
+    }
+
+    .option-label input[type="radio"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      flex-shrink: 0;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+
+    .option-label input[type="radio"]::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--sage);
+      transition: transform 0.2s ease;
+    }
+
+    .option-label input[type="radio"]:checked {
+      border-color: var(--sage);
+    }
+
+    .option-label input[type="radio"]:checked::after {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .option-label:has(input:checked) {
+      border-color: var(--sage);
+      background: var(--sage-light);
+      color: var(--stone-dark);
+      font-weight: 500;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--stone-dark);
+      background: white;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+      line-height: 1.7;
+    }
+
+    textarea::placeholder { color: var(--stone-light); }
+    textarea:focus { border-color: var(--sage); }
+
+    .optional-tag {
+      font-size: 11px;
+      color: var(--stone-light);
+      letter-spacing: 0.08em;
+      margin-left: 8px;
+      font-weight: 400;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .submit-area {
+      margin-top: 3rem;
+      text-align: center;
+    }
+
+    .submit-btn {
+      background: var(--stone-dark);
+      color: var(--warm-white);
+      border: none;
+      padding: 15px 48px;
+      border-radius: 99px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .submit-btn:hover { background: var(--stone); transform: translateY(-1px); }
+    .submit-btn:active { transform: scale(0.98); }
+
+    .submit-hint {
+      font-size: 12px;
+      color: var(--stone-light);
+      margin-top: 1rem;
+    }
+
+    /* Result screen */
+    #result-screen {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .result-hero {
+      background: linear-gradient(160deg, #eef4f0 0%, #f5ede8 100%);
+      padding: 5rem 2rem 3rem;
+      text-align: center;
+    }
+
+    .result-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: white;
+      border: 1.5px solid var(--sage-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 26px;
+    }
+
+    .result-hero h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--stone-dark);
+      margin-bottom: 1rem;
+    }
+
+    .result-hero p {
+      font-size: 15px;
+      color: var(--stone);
+      max-width: 460px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    .result-body {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+    }
+
+    .result-section-title {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--stone-light);
+      font-weight: 500;
+      margin-bottom: 1.2rem;
+    }
+
+    .summary-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 3rem;
+    }
+
+    .summary-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+    }
+
+    .summary-card .card-label {
+      font-size: 11px;
+      color: var(--stone-light);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .summary-card .card-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.15rem;
+      color: var(--stone-dark);
+      font-weight: 400;
+    }
+
+    .freq-chart {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .freq-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+
+    .freq-label {
+      min-width: 90px;
+      color: var(--stone);
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .freq-track {
+      flex: 1;
+      height: 8px;
+      background: var(--sage-light);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .freq-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--sage) 0%, var(--blush-dark) 100%);
+      border-radius: 99px;
+      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 0%;
+    }
+
+    .freq-count {
+      min-width: 30px;
+      color: var(--stone-light);
+      font-size: 12px;
+    }
+
+    .reflection-box {
+      background: var(--sage-light);
+      border-left: 3px solid var(--sage);
+      border-radius: 0 10px 10px 0;
+      padding: 1.5rem 1.5rem 1.5rem 1.8rem;
+      margin-bottom: 3rem;
+    }
+
+    .reflection-box p {
+      font-size: 14px;
+      color: var(--stone);
+      line-height: 1.85;
+      font-style: italic;
+    }
+
+    .open-answers {
+      margin-bottom: 3rem;
+    }
+
+    .open-answer-item {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 12px;
+      background: white;
+    }
+
+    .open-answer-item .qa-q {
+      font-size: 12px;
+      color: var(--stone-light);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .open-answer-item .qa-a {
+      font-size: 14px;
+      color: var(--stone-dark);
+      line-height: 1.7;
+    }
+
+    .download-btn {
+      display: inline-block;
+      background: white;
+      border: 1.5px solid var(--sage-mid);
+      color: var(--stone);
+      padding: 12px 32px;
+      border-radius: 99px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+
+    .download-btn:hover { background: var(--sage-light); border-color: var(--sage); }
+
+    .footer-note {
+      text-align: center;
+      font-size: 12px;
+      color: var(--stone-light);
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      line-height: 1.8;
+    }
+
+    .error-msg {
+      font-size: 12px;
+      color: #b05a5a;
+      margin-top: 8px;
+      display: none;
+    }
+
+    .question-block.has-error .option-label,
+    .question-block.has-error textarea {
+      border-color: #e0b0b0;
+    }
+
+    .question-block.has-error .error-msg { display: block; }
+
+    @media (max-width: 500px) {
+      .hero { padding: 3.5rem 1.5rem 3rem; }
+      .container { padding: 2rem 1.25rem 4rem; }
+      .result-body { padding: 2rem 1.25rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="form-screen">
+  <div class="hero">
+    <p class="hero-eyebrow">Pesquisa de percepção</p>
+    <h1>Como as palavras <em>moldam</em> nossas experiências</h1>
+    <p>Este questionário explora de forma confidencial como o desrespeito verbal afeta nossa vida cotidiana, relacionamentos e bem-estar.</p>
+    <div class="hero-meta">
+      <span>Anônimo e confidencial</span>
+      <span>Cerca de 5 minutos</span>
+      <span>10 perguntas</span>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progress-fill"></div>
+    </div>
+
+    <div id="questions-container"></div>
+
+    <div class="submit-area">
+      <button class="submit-btn" onclick="submitForm()">Enviar respostas</button>
+      <p class="submit-hint">Suas respostas são completamente anônimas.</p>
+    </div>
+  </div>
+</div>
+
+<div id="result-screen"></div>
+
+<script>
+const QUESTIONS_URL = 'questions.json';
+
+let questions = [];
+let answers = {};
+
+async function loadQuestions() {
+  try {
+    const res = await fetch(QUESTIONS_URL);
+    questions = await res.json();
+  } catch (e) {
+    questions = getFallbackQuestions();
+  }
+  renderQuestions();
+  setupScrollObserver();
+  updateProgress();
+}
+
+function getFallbackQuestions() {
+  return [
+    { id: 1, text: "Qual seu gênero?", required: true, type: "radio", options: ["Feminino", "Masculino", "Outro/Prefiro não dizer"] },
+    { id: 2, text: "Você já foi agredido(a) em um relacionamento amoroso?", required: true, type: "radio", options: ["Nunca", "Às vezes", "Frequentemente", "Quase sempre"] },
+    { id: 3, text: "Com que frequência você recebia ou recebe comentários constrangedores no ambiente familiar?", required: true, type: "radio", options: ["Nunca", "Às vezes", "Frequentemente", "Quase sempre"] },
+    { id: 4, text: "Como você aprendeu a lidar com comentários desconfortáveis relacionados a você?", required: false, type: "textarea", placeholder: "Escreva livremente..." },
+    { id: 5, text: "Com que frequência você se sente verbalmente desrespeitado(a) em geral?", required: true, type: "radio", options: ["Nunca", "Às vezes", "Frequentemente", "Quase sempre"] },
+    { id: 6, text: "Você já testemunhou, dentro de sua família ou vida social, mulheres sofrendo algum tipo de desrespeito verbal?", required: true, type: "radio", options: ["Nunca", "Às vezes", "Frequentemente", "Quase sempre"] },
+    { id: 7, text: "Você já testemunhou, dentro de sua família ou vida social, homens sofrendo algum tipo de desrespeito verbal?", required: true, type: "radio", options: ["Nunca", "Às vezes", "Frequentemente", "Quase sempre"] },
+    { id: 8, text: "Quais palavras ditas sobre você que mais te marcaram? De forma positiva, negativa ou neutra.", required: false, type: "textarea", placeholder: "Escreva livremente..." },
+    { id: 9, text: "Você já foi alvo de boatos recorrentes?", required: true, type: "radio", options: ["Nunca", "Às vezes", "Frequentemente", "Quase sempre"] },
+    { id: 10, text: "Qual ambiente social você considera hostil?", required: true, type: "radio", options: ["Corporativo", "Acadêmico", "Doméstico", "Todos", "Nenhum"] }
+  ];
+}
+
+function renderQuestions() {
+  const container = document.getElementById('questions-container');
+  container.innerHTML = '';
+  questions.forEach((q, idx) => {
+    const block = document.createElement('div');
+    block.className = 'question-block';
+    block.id = `q-block-${q.id}`;
+
+    let inputHTML = '';
+    if (q.type === 'radio') {
+      inputHTML = `<div class="options-grid">${q.options.map(opt => `
+        <label class="option-label">
+          <input type="radio" name="q${q.id}" value="${opt}" onchange="handleAnswer(${q.id}, '${opt}')">
+          ${opt}
+        </label>`).join('')}</div>`;
+    } else if (q.type === 'textarea') {
+      inputHTML = `<textarea id="ta-${q.id}" placeholder="${q.placeholder || ''}" rows="4" oninput="handleAnswer(${q.id}, this.value)"></textarea>`;
+    }
+
+    block.innerHTML = `
+      <div class="question-number">Pergunta ${String(idx + 1).padStart(2, '0')}</div>
+      <div class="question-text">${q.text}${q.required ? '<span class="required-star">*</span>' : '<span class="optional-tag">opcional</span>'}</div>
+      ${inputHTML}
+      <div class="error-msg">Por favor, responda esta pergunta antes de continuar.</div>
+    `;
+
+    container.appendChild(block);
+
+    if (idx < questions.length - 1) {
+      const divider = document.createElement('div');
+      divider.className = 'divider';
+      container.appendChild(divider);
+    }
+  });
+}
+
+function handleAnswer(id, value) {
+  answers[id] = value;
+  const block = document.getElementById(`q-block-${id}`);
+  block.classList.remove('has-error');
+  updateProgress();
+}
+
+function updateProgress() {
+  const required = questions.filter(q => q.required);
+  const answered = required.filter(q => answers[q.id] && answers[q.id].toString().trim() !== '');
+  const pct = required.length > 0 ? (answered.length / required.length) * 100 : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+function setupScrollObserver() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.question-block').forEach(b => observer.observe(b));
+}
+
+function submitForm() {
+  let valid = true;
+  questions.filter(q => q.required).forEach(q => {
+    const val = answers[q.id];
+    const block = document.getElementById(`q-block-${q.id}`);
+    if (!val || val.toString().trim() === '') {
+      block.classList.add('has-error');
+      if (valid) {
+        block.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        valid = false;
+      }
+    }
+  });
+  if (!valid) return;
+  showResults();
+}
+
+function showResults() {
+  document.getElementById('form-screen').style.display = 'none';
+  const screen = document.getElementById('result-screen');
+  screen.style.display = 'block';
+
+  const freqMap = { 'Nunca': 0, 'Às vezes': 1, 'Frequentemente': 2, 'Quase sempre': 3 };
+  const freqKeys = ['Nunca', 'Às vezes', 'Frequentemente', 'Quase sempre'];
+  const freqCounts = [0, 0, 0, 0];
+  const freqQuestions = [2, 3, 5, 6, 7, 9];
+
+  freqQuestions.forEach(id => {
+    const val = answers[id];
+    if (val && freqMap[val] !== undefined) freqCounts[freqMap[val]]++;
+  });
+
+  const totalFreq = freqCounts.reduce((a, b) => a + b, 0);
+  const weightedScore = totalFreq > 0 ? freqCounts.reduce((acc, c, i) => acc + c * i, 0) / (totalFreq * 3) : 0;
+
+  const genero = answers[1] || '—';
+  const ambiente = answers[10] || '—';
+
+  let intensityLabel, intensityMsg, reflectionText;
+  if (weightedScore < 0.25) {
+    intensityLabel = 'Baixa exposição';
+    intensityMsg = 'Você relatou pouca exposição a situações de desrespeito verbal.';
+    reflectionText = 'Embora sua experiência com o desrespeito verbal pareça limitada, a percepção de quem está ao redor importa tanto quanto a própria vivência. Sua perspectiva pode ser um instrumento valioso de apoio a quem mais sofre.';
+  } else if (weightedScore < 0.55) {
+    intensityLabel = 'Exposição moderada';
+    intensityMsg = 'Você vivenciou situações de desrespeito verbal com alguma regularidade.';
+    reflectionText = 'Situações recorrentes de desconforto verbal — mesmo que percebidas como pequenas — podem deixar marcas sutis. Reconhecer esses padrões é o primeiro passo para ressignificar experiências passadas e fortalecer os vínculos futuros.';
+  } else {
+    intensityLabel = 'Alta exposição';
+    intensityMsg = 'Você vivenciou com frequência situações de desrespeito ou agressão verbal.';
+    reflectionText = 'Sua trajetória carrega um volume considerável de experiências difíceis. Isso é um sinal de resiliência, não de fraqueza. Se em algum momento essas vivências pesarem mais, considere buscar apoio profissional — você merece um espaço seguro para processar tudo isso.';
+  }
+
+  const openAnswers = questions.filter(q => q.type === 'textarea' && answers[q.id] && answers[q.id].trim() !== '');
+
+  screen.innerHTML = `
+    <div class="result-hero">
+      <div class="result-icon">🌿</div>
+      <h2>Obrigado por compartilhar</h2>
+      <p>Suas respostas foram registradas. Aqui está um resumo da sua vivência com base no que você nos contou.</p>
+    </div>
+
+    <div class="result-body">
+      <p class="result-section-title">Resumo geral</p>
+      <div class="summary-cards">
+        <div class="summary-card">
+          <div class="card-label">Gênero</div>
+          <div class="card-value">${genero}</div>
+        </div>
+        <div class="summary-card">
+          <div class="card-label">Nível de exposição</div>
+          <div class="card-value">${intensityLabel}</div>
+        </div>
+        <div class="summary-card">
+          <div class="card-label">Ambiente hostil</div>
+          <div class="card-value">${ambiente}</div>
+        </div>
+      </div>
+
+      <p class="result-section-title">Distribuição de frequências</p>
+      <div class="freq-chart">
+        ${freqKeys.map((k, i) => `
+          <div class="freq-row">
+            <span class="freq-label">${k}</span>
+            <div class="freq-track"><div class="freq-fill" id="ff-${i}" data-pct="${totalFreq > 0 ? Math.round((freqCounts[i] / totalFreq) * 100) : 0}"></div></div>
+            <span class="freq-count">${freqCounts[i]}x</span>
+          </div>
+        `).join('')}
+        <p style="font-size:12px;color:var(--stone-light);margin-top:12px;">Baseado nas ${freqQuestions.length} perguntas de frequência.</p>
+      </div>
+
+      <div class="reflection-box">
+        <p>${reflectionText}</p>
+      </div>
+
+      ${openAnswers.length > 0 ? `
+        <p class="result-section-title">Suas reflexões abertas</p>
+        <div class="open-answers">
+          ${openAnswers.map(q => `
+            <div class="open-answer-item">
+              <div class="qa-q">${q.text}</div>
+              <div class="qa-a">${answers[q.id]}</div>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+
+      <div style="text-align:center;">
+        <button class="download-btn" onclick="downloadPDF()">Baixar resumo em texto</button>
+      </div>
+
+      <div class="footer-note">
+        Este questionário é de caráter acadêmico e não substitui acompanhamento profissional.<br>
+        Se precisar de apoio emocional, o CVV atende 24h pelo número <strong>188</strong>.
+      </div>
+    </div>
+  `;
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      freqKeys.forEach((_, i) => {
+        const el = document.getElementById(`ff-${i}`);
+        if (el) {
+          const pct = el.dataset.pct;
+          el.style.width = pct + '%';
+        }
+      });
+    }, 300);
+  });
+}
+
+function downloadPDF() {
+  let txt = 'RESUMO DO QUESTIONÁRIO\n';
+  txt += '='.repeat(40) + '\n\n';
+  questions.forEach(q => {
+    const ans = answers[q.id];
+    if (ans && ans.toString().trim()) {
+      txt += `${q.text}\n→ ${ans}\n\n`;
+    }
+  });
+  txt += '\nGerado em: ' + new Date().toLocaleDateString('pt-BR');
+  const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'resumo-questionario.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+loadQuestions();
+</script>
+</body>
+</html>

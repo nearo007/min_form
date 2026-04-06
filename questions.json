@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "text": "Qual seu gênero?",
+    "required": true,
+    "type": "radio",
+    "options": ["Feminino", "Masculino", "Outro/Prefiro não dizer"]
+  },
+  {
+    "id": 2,
+    "text": "Você já foi agredido(a) em um relacionamento amoroso?",
+    "required": true,
+    "type": "radio",
+    "options": ["Nunca", "Às vezes", "Frequentemente", "Quase sempre"]
+  },
+  {
+    "id": 3,
+    "text": "Com que frequência você recebia ou recebe comentários constrangedores no ambiente familiar?",
+    "required": true,
+    "type": "radio",
+    "options": ["Nunca", "Às vezes", "Frequentemente", "Quase sempre"]
+  },
+  {
+    "id": 4,
+    "text": "Como você aprendeu a lidar com comentários desconfortáveis relacionados a você?",
+    "required": false,
+    "type": "textarea",
+    "placeholder": "Escreva livremente..."
+  },
+  {
+    "id": 5,
+    "text": "Com que frequência você se sente verbalmente desrespeitado(a) em geral?",
+    "required": true,
+    "type": "radio",
+    "options": ["Nunca", "Às vezes", "Frequentemente", "Quase sempre"]
+  },
+  {
+    "id": 6,
+    "text": "Você já testemunhou, dentro de sua família ou vida social, mulheres sofrendo algum tipo de desrespeito verbal?",
+    "required": true,
+    "type": "radio",
+    "options": ["Nunca", "Às vezes", "Frequentemente", "Quase sempre"]
+  },
+  {
+    "id": 7,
+    "text": "Você já testemunhou, dentro de sua família ou vida social, homens sofrendo algum tipo de desrespeito verbal?",
+    "required": true,
+    "type": "radio",
+    "options": ["Nunca", "Às vezes", "Frequentemente", "Quase sempre"]
+  },
+  {
+    "id": 8,
+    "text": "Quais palavras ditas sobre você que mais te marcaram? De forma positiva, negativa ou neutra.",
+    "required": false,
+    "type": "textarea",
+    "placeholder": "Escreva livremente..."
+  },
+  {
+    "id": 9,
+    "text": "Você já foi alvo de boatos recorrentes?",
+    "required": true,
+    "type": "radio",
+    "options": ["Nunca", "Às vezes", "Frequentemente", "Quase sempre"]
+  },
+  {
+    "id": 10,
+    "text": "Qual ambiente social você considera hostil?",
+    "required": true,
+    "type": "radio",
+    "options": ["Corporativo", "Acadêmico", "Doméstico", "Todos", "Nenhum"]
+  }
+]
